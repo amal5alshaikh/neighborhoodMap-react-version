@@ -3,8 +3,19 @@ import {map_style} from './map_style.js'
 import scriptLoader from 'react-async-script-loader'
 import './App.css'
 import fetchJsonp from 'fetch-jsonp';
+import $ from 'jquery';
 
 
+var foursquare = require('react-foursquare')({
+  clientID: 'NEMBIHYDJN5NFQ3AYISJMGYCZCJDLH4XBBYXR5TE0WJGT0ES',
+  clientSecret: 'NBM43Q2QAV2CYYPF5BBPXUCXJ31IT1HHBMUFAU1TMBTAZFCU'
+});
+
+
+var params = {
+  "ll": "43.6425701,-79.3892455",
+  "query": 'University Of Torronto'
+};
 
 class MapComponent extends Component {
 
@@ -36,30 +47,36 @@ class MapComponent extends Component {
       }
     }
 
+    updateData = (newData) => {
+        this.setState({
+          data:newData,
+        });
+      }
 
 
+      componentDidMount() {
+      this.apiCall();
 
-    componentDidMount(){
-   this.props.locations.map((location,index)=>{
-     return fetchJsonp(`https://en.wikipedia.org/w/api.php?action=opensearch&search=${location.title}&format=json&callback=wikiCallback`)
-     .then(response => response.json()).then((responseJson) => {
-       let newData = [...this.state.data,[responseJson,responseJson[2][0],responseJson[3][0]]]
-       this.updateData(newData)
-     }).catch(error =>
-     console.error(error)
-     )
-   })
- }
+    }
 
+    apiCall() {
+      let self = this;
+      this.props.locations.map((location,index)=>{
+      var flickerAPI = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
 
+      $.getJSON(
+        flickerAPI,
+        {tags: location.title,format: "json"}).done(function( data ) {
+          self.state.data.push(data.items[6]);
 
+    });
+  })
+  }
 
+    componentDidUpdate = () => {
+        this.populateMarkers(this.props.locations);
+      }
 
-componentDidUpdate = () => {
-
-  this.populateMarkers(this.props.locations);
-
-}
     populateMarkers = (locations) => {
       let self = this
       let bounds = new window.google.maps.LatLngBounds();
@@ -82,20 +99,22 @@ componentDidUpdate = () => {
        });
 
        bounds.extend(marker.position);
-        this.state.map.fitBounds(bounds)
-        this.state.markers.push(marker);
+          this.state.map.fitBounds(bounds)
+          this.state.markers.push(marker);
      }
     }
 
 
     populateInfoWindow = (marker) => {
       let  infowindow = new window.google.maps.InfoWindow();
-
+      let self = this;
         if(marker)
         if(infowindow.marker != marker) {
           infowindow.marker = marker;
 
-          infowindow.setContent('<div>'+ marker.title +'</div>');
+          infowindow.setContent(`<div> ${marker.title} </div>
+            <img src=${self.state.data[marker.id].media.m} />
+            ` );
 
           infowindow.addListener('closeclick',function() {
             infowindow.close();
@@ -111,17 +130,20 @@ componentDidUpdate = () => {
        toggleBounce = (marker) => {
         if(marker)
               if (marker.getAnimation() !== null) {
-                marker.setAnimation(null);
+                  marker.setAnimation(null);
               } else {
-                marker.setAnimation(window.google.maps.Animation.BOUNCE);
-                setTimeout(function(){ marker.setAnimation(null); }, 3000);
+                  marker.setAnimation(window.google.maps.Animation.BOUNCE);
+                  setTimeout(function(){ marker.setAnimation(null); }, 3000);
               }
             }
 
 
 
 render() {
-  return (<div className="google-map" id="map"></div>)
+  return (
+    <div className="google-map" id="map"></div>
+
+)
   }
 }
 

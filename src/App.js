@@ -12,14 +12,19 @@ state = {
   {title:'Art Gallery of Ontario', location:{lat:43.6536105,lng:-79.394701}},
   {title:'Casa Loma', location:{lat:43.678041,lng:-79.4116326}},
   {title:'University Of Toronto', location:{lat:43.6647541,lng:-79.4034208}},
-  ]
+],
+triggeredPlace: ''
+}
+
+triggerAPlace = (value) => {
+  this.state.triggeredPlace = value
 }
 
   render() {
     return (
       <div className="App">
-        <List locations={this.state.locations}/>
-        <MapComponent locations={this.state.locations}/>
+        <List locations={this.state.locations} trigger={this.triggerAPlace}/>
+        <MapComponent locations={this.state.locations} triggeredPlace={this.state.triggeredPlace}/>
       </div>
     );
   }
