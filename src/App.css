@@ -1,0 +1,61 @@
+.App {
+  text-align: center;
+  background-color: #222;
+  color: black;
+  margin: auto;
+  display: flex;
+  position:fixed;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 3s linear;
+  height: 80px;
+}
+
+.location {
+  color: red;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+
+.list {
+  list-style-type: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+.nav-side {
+  width: 30%;
+  color: white;
+}
+
+.item {
+  font: 200 12px/1.5;
+  padding: 10px;
+  overflow: auto;
+}
+
+.item:hover {
+  background: gray;
+  cursor: pointer;
+}
+
+.google-map {
+  height: auto;
+  width: 90%;
+}
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotateY(360deg); }
+}
