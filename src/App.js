@@ -20,6 +20,7 @@ triggerAPlace = (value) => {
   this.state.triggeredPlace = value
 }
 
+
   render() {
     return (
       <div className="App">

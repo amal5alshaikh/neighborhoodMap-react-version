@@ -38,12 +38,21 @@
 .nav-side {
   width: 30%;
   color: white;
+  padding: 10px;
 }
 
 .item {
   font: 200 12px/1.5;
   padding: 10px;
   overflow: auto;
+}
+
+
+input[type="search"] {
+  height: 35px;
+  width:100%;
+  border: 0px;;
+  background: lightgray;
 }
 
 .item:hover {

@@ -2,20 +2,8 @@ import React, { Component } from 'react';
 import {map_style} from './map_style.js'
 import scriptLoader from 'react-async-script-loader'
 import './App.css'
-import fetchJsonp from 'fetch-jsonp';
 import $ from 'jquery';
 
-
-var foursquare = require('react-foursquare')({
-  clientID: 'NEMBIHYDJN5NFQ3AYISJMGYCZCJDLH4XBBYXR5TE0WJGT0ES',
-  clientSecret: 'NBM43Q2QAV2CYYPF5BBPXUCXJ31IT1HHBMUFAU1TMBTAZFCU'
-});
-
-
-var params = {
-  "ll": "43.6425701,-79.3892455",
-  "query": 'University Of Torronto'
-};
 
 class MapComponent extends Component {
 
@@ -47,21 +35,14 @@ class MapComponent extends Component {
       }
     }
 
-    updateData = (newData) => {
-        this.setState({
-          data:newData,
-        });
-      }
 
-
-      componentDidMount() {
+    componentDidMount = () => {
       this.apiCall();
-
     }
 
     apiCall() {
       let self = this;
-      this.props.locations.map((location,index)=>{
+      this.props.locations.map((location,index)=>  {
       var flickerAPI = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
 
       $.getJSON(
@@ -73,8 +54,11 @@ class MapComponent extends Component {
   })
   }
 
+
+
     componentDidUpdate = () => {
         this.populateMarkers(this.props.locations);
+        console.log("hll")
       }
 
     populateMarkers = (locations) => {
@@ -93,23 +77,30 @@ class MapComponent extends Component {
        });
 
        marker.addListener('click', function(){
-          self.state.infoWindows.forEach(info => { info.close() });
-          self.toggleBounce(this);
-          self.populateInfoWindow(this);
+         self.toggleMarkere(this);
        });
 
        bounds.extend(marker.position);
           this.state.map.fitBounds(bounds)
           this.state.markers.push(marker);
      }
+
+
+     console.log(this.props.triggeredPlace)
     }
 
+
+    toggleMarkere = (marker) => {
+      this.state.infoWindows.forEach(info => { info.close() });
+      this.toggleBounce(marker);
+      this.populateInfoWindow(marker);
+    }
 
     populateInfoWindow = (marker) => {
       let  infowindow = new window.google.maps.InfoWindow();
       let self = this;
         if(marker)
-        if(infowindow.marker != marker) {
+        if(infowindow.marker !== marker) {
           infowindow.marker = marker;
 
           infowindow.setContent(`<div> ${marker.title} </div>
