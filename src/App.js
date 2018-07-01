@@ -3,7 +3,6 @@ import './App.css';
 import List from './List.js';
 import MapComponent from './MapComponent.js'
 import escapeRegExp from 'escape-string-regexp';
-import sortBy from 'sort-by';
 
 
 export default class App extends Component {

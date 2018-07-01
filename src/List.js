@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import loc from './loc.svg';
-import escapeRegExp from 'escape-string-regexp';
-import sortBy from 'sort-by';
 
 
 class List extends Component {
@@ -23,15 +21,24 @@ class List extends Component {
     return (
       <div className="nav-side">
       <img src={loc} className="App-logo" alt="marker" />
-      <h1 className="App-title">Mishas Map </h1>
+      <h1 tabIndex='0' role="region" aria-label="Torronto Places" className="App-title">Torronto Map </h1>
       <input type="search"
+             role="search"
+             aria-labelledby="Search For a Location"
+             tabIndex="1"
              placeholder= "University of Torronto"
              value={this.props.query}
              onChange={(event)=> this.updatequery(event.target.value)}/>
-        <ol className="list">
+        <ol className="list" aria-labelledby="list of locations" tabIndex="1">
 
         {this.props.filteredLocations.map((location, index) =>
-          <li key={index} data-id={index} className="item" onClick={(event)=> this.props.trigger(event.currentTarget.dataset.id )}> {location.title}  </li>
+          <li
+          key={index}
+          data-id={index}
+          className="item"
+          tabIndex={index+2}
+          area-labelledby={`View details for ${location.title}`}
+           onClick={(event)=> this.props.trigger(event.currentTarget.dataset.id )}> {location.title}  </li>
         )}
         </ol>
       </div>

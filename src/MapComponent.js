@@ -12,7 +12,8 @@ class MapComponent extends Component {
       map : {},
       markers:[],
       infoWindows: [],
-      data:[]
+      data:[],
+      mapLoaded: true
     }
 
 
@@ -40,7 +41,8 @@ class MapComponent extends Component {
 
           let self = this;
           this.props.locations.map((location,index)=>  {
-          var flickerAPI = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
+
+            var flickerAPI = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
 
           $.getJSON(
             flickerAPI,
@@ -48,6 +50,7 @@ class MapComponent extends Component {
               self.state.data.push(data.items[6]);
 
         });
+
       })
     }
 
@@ -125,7 +128,6 @@ class MapComponent extends Component {
 
 
       hideListings =  () => {
-          let self = this;
           this.state.markers.forEach(function(marker) {
                 marker.setVisible(false);
              });
@@ -140,8 +142,7 @@ class MapComponent extends Component {
 
 render() {
   return (
-    <div className="google-map" id="map"></div>
-
+    <div role="application" tabIndex="-1" className="google-map" id="map"></div>
 )
   }
 }
