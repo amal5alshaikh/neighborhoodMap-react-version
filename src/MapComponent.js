@@ -57,11 +57,12 @@ class MapComponent extends Component {
 
 
     componentDidUpdate = () => {
-        this.populateMarkers(this.props.locations);
-        console.log("hll")
+      this.populateMarkers(this.props.locations);
       }
 
     populateMarkers = (locations) => {
+      this.hideListings();
+
       let self = this
       let bounds = new window.google.maps.LatLngBounds();
       for ( var i = 0; i< locations.length; i++){
@@ -84,9 +85,6 @@ class MapComponent extends Component {
           this.state.map.fitBounds(bounds)
           this.state.markers.push(marker);
      }
-
-
-     console.log(this.props.triggeredPlace)
     }
 
 
@@ -127,6 +125,16 @@ class MapComponent extends Component {
                   setTimeout(function(){ marker.setAnimation(null); }, 3000);
               }
             }
+
+
+      hideListings =  () => {
+          let self = this;
+          this.state.markers.forEach(function(marker) {
+        
+                marker.setVisible(false);
+             });
+            }
+
 
 
 

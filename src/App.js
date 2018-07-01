@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import './App.css';
 import List from './List.js';
 import MapComponent from './MapComponent.js'
+import escapeRegExp from 'escape-string-regexp';
+import sortBy from 'sort-by';
+
 
 export default class App extends Component {
 state = {
@@ -12,20 +15,36 @@ state = {
   {title:'Art Gallery of Ontario', location:{lat:43.6536105,lng:-79.394701}},
   {title:'Casa Loma', location:{lat:43.678041,lng:-79.4116326}},
   {title:'University Of Toronto', location:{lat:43.6647541,lng:-79.4034208}},
-],
-triggeredPlace: ''
+], query: '',
+  triggeredPlace: ''
 }
 
 triggerAPlace = (value) => {
-  this.state.triggeredPlace = value
+  this.setState({triggeredPlace: value})
 }
 
 
+filteringLocations = (query) => {
+  this.setState({query: query})
+  }
+
   render() {
+    let filteredLocations
+    if(this.state.query){
+    const match = new RegExp(escapeRegExp(this.state.query),'i')
+     filteredLocations = this.state.locations.filter((location)=> match.test(location.title))
+  } else {
+    filteredLocations = this.state.locations
+  }
+
     return (
       <div className="App">
-        <List locations={this.state.locations} trigger={this.triggerAPlace}/>
-        <MapComponent locations={this.state.locations} triggeredPlace={this.state.triggeredPlace}/>
+        <List locations={this.state.locations}
+              filteredLocations={filteredLocations}
+              query={this.state.query}
+              filteringLocations={this.filteringLocations}
+              trigger={this.triggerAPlace}/>
+        <MapComponent locations={filteredLocations} triggeredPlace={this.state.triggeredPlace}/>
       </div>
     );
   }
