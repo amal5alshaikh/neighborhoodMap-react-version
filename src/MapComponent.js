@@ -37,22 +37,19 @@ class MapComponent extends Component {
 
 
     componentDidMount = () => {
-      this.apiCall();
+
+          let self = this;
+          this.props.locations.map((location,index)=>  {
+          var flickerAPI = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
+
+          $.getJSON(
+            flickerAPI,
+            {tags: location.title,format: "json"}).done(function( data ) {
+              self.state.data.push(data.items[6]);
+
+        });
+      })
     }
-
-    apiCall() {
-      let self = this;
-      this.props.locations.map((location,index)=>  {
-      var flickerAPI = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
-
-      $.getJSON(
-        flickerAPI,
-        {tags: location.title,format: "json"}).done(function( data ) {
-          self.state.data.push(data.items[6]);
-
-    });
-  })
-  }
 
 
 
@@ -130,10 +127,13 @@ class MapComponent extends Component {
       hideListings =  () => {
           let self = this;
           this.state.markers.forEach(function(marker) {
-        
                 marker.setVisible(false);
              });
-            }
+
+          this.state.infoWindows.forEach(function(infoWindow) {
+                   infoWindow.close();
+                });
+      }
 
 
 
