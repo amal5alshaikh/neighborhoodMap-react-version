@@ -19,7 +19,7 @@ state = {
 }
 
 triggerAPlace = (value) => {
-  this.setState({triggeredPlace: value})
+  this.setState({triggeredPlace : value})
 }
 
 
@@ -35,6 +35,7 @@ filteringLocations = (query) => {
   } else {
     filteredLocations = this.state.locations
   }
+
 
     return (
       <div className="App">

@@ -38,7 +38,7 @@ class List extends Component {
           className="item"
           tabIndex={index+2}
           area-labelledby={`View details for ${location.title}`}
-           onClick={(event)=> this.props.trigger(event.currentTarget.dataset.id )}> {location.title}  </li>
+          onClick={(event)=> this.props.trigger(event.currentTarget.dataset.id )}> {location.title}  </li>
         )}
         </ol>
       </div>

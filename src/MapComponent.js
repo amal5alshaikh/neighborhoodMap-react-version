@@ -13,7 +13,8 @@ class MapComponent extends Component {
       markers:[],
       infoWindows: [],
       data:[],
-      mapLoaded: true
+      mapLoaded: true,
+      triggeredPlace : ""
     }
 
 
@@ -34,6 +35,7 @@ class MapComponent extends Component {
         else this.props.onError()
 
       }
+
     }
 
 
@@ -78,7 +80,7 @@ class MapComponent extends Component {
        });
 
        marker.addListener('click', function(){
-         self.toggleMarkere(this);
+         self.toggleMarker(this);
        });
 
        bounds.extend(marker.position);
@@ -88,12 +90,16 @@ class MapComponent extends Component {
     }
 
 
-    toggleMarkere = (marker) => {
+    toggleMarker = (marker) => {
       this.state.infoWindows.forEach(info => { info.close() });
       this.toggleBounce(marker);
       this.populateInfoWindow(marker);
     }
 
+
+ trigger = (target, event) => {
+   window.google.maps.event.trigger(this.state.markers[target], 'click');
+ }
     populateInfoWindow = (marker) => {
       let  infowindow = new window.google.maps.InfoWindow();
       let self = this;
@@ -141,6 +147,7 @@ class MapComponent extends Component {
 
 
 render() {
+
   return (
     <div role="application" tabIndex="-1" className="google-map" id="map"></div>
 )
