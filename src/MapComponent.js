@@ -3,7 +3,7 @@ import {map_style} from './map_style.js'
 import scriptLoader from 'react-async-script-loader'
 import './App.css'
 import $ from 'jquery';
-
+import fetchJsonp from 'fetch-jsonp';
 
 class MapComponent extends Component {
 
@@ -17,6 +17,12 @@ class MapComponent extends Component {
       triggeredPlace : ""
     }
 
+
+    updateData = (newData) => {
+        this.setState({
+          data:newData,
+        });
+      }
 
     componentWillReceiveProps ({ isScriptLoaded, isScriptLoadSucceed }) {
       if (isScriptLoaded && !this.props.isScriptLoaded) { // load finished
@@ -36,24 +42,22 @@ class MapComponent extends Component {
 
       }
 
+      if(this.props.triggeredPlace){
+        this.toggleMarker(this.state.markers[this.props.triggeredPlace]);
+      }
     }
 
 
     componentDidMount = () => {
-
-          let self = this;
-          this.props.locations.map((location,index)=>  {
-
-            var flickerAPI = "http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
-
-          $.getJSON(
-            flickerAPI,
-            {tags: location.title,format: "json"}).done(function( data ) {
-              self.state.data.push(data.items[6]);
-
-        });
-
-      })
+      this.props.locations.map((location,index)=>{
+   return fetchJsonp(`https://en.wikipedia.org/w/api.php?action=opensearch&search=${location.title}&format=json&callback=wikiCallback`)
+   .then(response => response.json()).then((responseJson) => {
+     let newData = [...this.state.data,[responseJson,responseJson[2][0],responseJson[3][0]]]
+     this.updateData(newData)
+   }).catch(error =>
+   console.error(error)
+   )
+ })
     }
 
 
@@ -74,12 +78,12 @@ class MapComponent extends Component {
        var marker = new window.google.maps.Marker({
          position: position,
          title: title,
-         animation: window.google.maps.Animation.DROP,
          id:i,
          map: this.state.map
        });
 
        marker.addListener('click', function(){
+         //self.props.trigger(marker.id)
          self.toggleMarker(this);
        });
 
@@ -97,9 +101,6 @@ class MapComponent extends Component {
     }
 
 
- trigger = (target, event) => {
-   window.google.maps.event.trigger(this.state.markers[target], 'click');
- }
     populateInfoWindow = (marker) => {
       let  infowindow = new window.google.maps.InfoWindow();
       let self = this;
@@ -107,8 +108,25 @@ class MapComponent extends Component {
         if(infowindow.marker !== marker) {
           infowindow.marker = marker;
 
+          let getData = this.state.data.filter((single)=>marker.title === single[0][0]).map(item2=>
+      {if (item2.length===0)
+        return 'No Contents Have Been Found Try to Search Manual'
+        else if (item2[1] !=='')
+          return item2[1]
+        else
+          return 'No Contents Have Been Found Try to Search Manual'
+      })
+    let getLink = this.state.data.filter((single)=>marker.title === single[0][0]).map(item2=>
+      {if (item2.length===0)
+        return 'https://www.wikipedia.org'
+        else if (item2[1] !=='')
+          return item2[2]
+        else
+          return 'https://www.wikipedia.org'
+      })
           infowindow.setContent(`<div> ${marker.title} </div>
-            <img src=${self.state.data[marker.id].media.m} />
+            <p>${getData}</p>
+    <a href=${getLink}>Click Here For More Info</a>
             ` );
 
           infowindow.addListener('closeclick',function() {

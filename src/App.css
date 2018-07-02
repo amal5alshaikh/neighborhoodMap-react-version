@@ -39,6 +39,8 @@
   width: 30%;
   color: white;
   padding: 10px;
+  overflow-x: hidden;
+  overflow: scroll;
 }
 
 .item {

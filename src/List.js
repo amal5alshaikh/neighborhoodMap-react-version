@@ -5,12 +5,6 @@ import loc from './loc.svg';
 
 class List extends Component {
 
-
-  state = {
-        query: ''
-      }
-
-
   updatequery =(query) => {
     this.props.filteringLocations(query)
   }
@@ -19,7 +13,7 @@ class List extends Component {
   render() {
 
     return (
-      <div className="nav-side">
+      <div className="nav-side" role="List of Torronto Places">
       <img src={loc} className="App-logo" alt="marker" />
       <h1 tabIndex='0' role="region" aria-label="Torronto Places" className="App-title">Torronto Map </h1>
       <input type="search"
@@ -29,7 +23,7 @@ class List extends Component {
              placeholder= "University of Torronto"
              value={this.props.query}
              onChange={(event)=> this.updatequery(event.target.value)}/>
-        <ol className="list" aria-labelledby="list of locations" tabIndex="1">
+        <ol className="list" aria-labelledby="list of locations" role="List of Torronto Places" tabIndex="1">
 
         {this.props.filteredLocations.map((location, index) =>
           <li
@@ -37,6 +31,7 @@ class List extends Component {
           data-id={index}
           className="item"
           tabIndex={index+2}
+          role="place"
           area-labelledby={`View details for ${location.title}`}
           onClick={(event)=> this.props.trigger(event.currentTarget.dataset.id )}> {location.title}  </li>
         )}

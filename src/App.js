@@ -44,7 +44,9 @@ filteringLocations = (query) => {
               query={this.state.query}
               filteringLocations={this.filteringLocations}
               trigger={this.triggerAPlace}/>
-        <MapComponent locations={filteredLocations} triggeredPlace={this.state.triggeredPlace}/>
+        <MapComponent locations={filteredLocations}
+                      trigger={this.triggerAPlace}
+                      triggeredPlace={this.state.triggeredPlace}/>
       </div>
     );
   }
