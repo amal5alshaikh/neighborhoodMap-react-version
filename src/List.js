@@ -9,6 +9,12 @@ class List extends Component {
     this.props.filteringLocations(query)
   }
 
+  /*
+  updatequery:
+  it will be called whenver the user write a lettter,
+  it will call the function on the parent to make the location filtered for the list and the mao markers.
+  */
+
 
   render() {
 

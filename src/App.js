@@ -18,14 +18,33 @@ state = {
   triggeredPlace: ''
 }
 
+/*
+  App.js  is the parent for two component, the map component and the list component.
+  because of that, some common data needed to be stored in the state of the parent like:
+    - query: since every word we search for, it should reflected on both the map and the list.. having it here is essential
+    whenver the query value changed, the filtered locations changed and sent back to both components.
+
+   - triggeredPlace: again this is a needed data for both components, whenver the user click on elemnt on the list..
+   that should be reflected on the marker too, for that we changed the state of this value so the whole parent will be re-rendered
+   sending that selected place to the map component then it will triggered the related marker.
+*/
+
 triggerAPlace = (value) => {
   this.setState({triggeredPlace : value})
 }
-
+/*
+triggereAPlace: this function wil be called on the list component, when the user click on list element
+it's updateing the selected place so that it will re render and trigger its marker.
+*/
 
 filteringLocations = (query) => {
   this.setState({query: query})
   }
+
+  /*
+  filteringLocations: this function will be called in the list view, whenver the user write a letter.. it will start filtering the parent component
+  locations causing that to be reflected on the other components.
+  */
 
   render() {
     let filteredLocations
@@ -36,6 +55,11 @@ filteringLocations = (query) => {
     filteredLocations = this.state.locations
   }
 
+  /*
+  when the query re-setted, and before rendering..
+  we will use that query to filter the locations and sending that to the components while rendering. 
+  */
+
 
     return (
       <div className="App">
@@ -45,7 +69,6 @@ filteringLocations = (query) => {
               filteringLocations={this.filteringLocations}
               trigger={this.triggerAPlace}/>
         <MapComponent locations={filteredLocations}
-                      trigger={this.triggerAPlace}
                       triggeredPlace={this.state.triggeredPlace}/>
       </div>
     );

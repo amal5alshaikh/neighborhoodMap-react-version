@@ -15,3 +15,6 @@ It is a single page app uses React Google maps and Flicker API to list my favori
 - run `npm install`
 - run `npm start' `
 - The browser will automatically open the Neighborhood Map App
+
+## How it works offline:
+Open google developer tool and navigate to the application section, check the box with `offline` to view the app with no internet connection. 
